@@ -1,0 +1,37 @@
+image: atlassian/default-image:2
+
+pipelines:
+    default:
+      - step:
+          image: php:7.1.1
+          name: PHP CodeSniffer
+          caches:
+             - composer
+          script:
+
+              - php -v
+
+      - step:
+          name: "Build"
+          script:
+            - zip -r thelastteam.zip .
+          artifacts: 
+            - thelastteam.zip
+
+
+      - step:
+          name: Deploy
+          deployment: production
+          script:
+            - pipe: atlassian/aws-code-deploy:0.2.5
+              variables:
+                AWS_ACCESS_KEY_ID: 'AKIARWQTNRQNREZH5JLC'
+                AWS_SECRET_ACCESS_KEY: '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'
+                AWS_DEFAULT_REGION: "us-east-2"
+                S3_BUCKET: "php-codedeploy"
+                COMMAND: 'upload'
+                APPLICATION_NAME: 'thelastteam-demo'
+                LOCAL_PATH: "source"
+                ZIP_FILE: 'thelastteam.zip'
+                VERSION_LABEL: 'thelastteam'
+      

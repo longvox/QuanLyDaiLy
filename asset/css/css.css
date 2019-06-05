@@ -1,0 +1,14 @@
+li:hover { 
+  background-color: yellow;
+}
+#right-content{
+    	padding:60px 0px 0px 232px;
+}
+#left-menu[closed] + #right-content{
+    	padding: 60px 0 0 5px;
+}
+table
+{
+	table-layout: fixed;
+	word-wrap:break-word;
+}

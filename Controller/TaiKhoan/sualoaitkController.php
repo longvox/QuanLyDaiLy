@@ -1,0 +1,155 @@
+<?php
+$role = array(
+    "daily"=>array(
+        "title" => "Danh Mục Đại Lý",
+        "link" =>"index.php?controller=dai-ly"
+    ),
+    "loaidl"=>array(
+        "title" => " Loại Đại Lý - Quận",
+        "link" =>"index.php?controller=loai-dai-ly"
+    ),
+    "mathang"=>array(
+        "title" => "Danh Mục Mặt Hàng",
+        "link" =>"index.php?controller=mat-hang"
+    ),
+    "phieuxuat"=>array(
+        "title" => "Danh Mục Phiếu Xuất",
+        "link" =>"index.php?controller=phieu-xuat"
+    ),
+    "phieuthu"=>array(
+        "title" => "Danh Mục Phiếu Thu",
+        "link" =>"index.php?controller=phieu-thu"
+    ),
+    "phieuthudalap"=>array(
+        "title" => "Danh Mục Phiếu Thu Đã Tạo",
+        "link" =>"index.php?controller=phieu-thu-da-lap"
+    ),
+    "addmathang"=>array(
+        "title" => "Thêm Mặt Hàng Vào Phiếu",
+        "link" =>"index.php?controller=them-mat-hang"
+    ),
+    "donvi"=>array(
+        "title" => "Danh Mục Đơn Vị Tính",
+        "link" =>"index.php?controller=don-vi"
+    ),
+    "phieudaxuat"=>array(
+        "title" => "Danh Mục Phiếu Đã Xuất",
+        "link" =>"index.php?controller=phieu-da-xuat"
+    ),
+    "ctphieudaxuat"=>array(
+        "title" => "Chi Tiết Phiếu Đã Xuất",
+        "link" =>"index.php?controller=ct-phieu-da-xuat"
+    ),
+    "bcdoanhso"=>array(
+        "title" => "Báo Cáo Doanh Số",
+        "link" =>"index.php?controller=bao-cao-doanh-so"
+    ),
+    "bccongno"=>array(
+        "title" => "Báo Cáo Công Nợ",
+        "link" =>"index.php?controller=bao-cao-cong-no"
+    ),
+    "phdaily"=>array(
+        "title" => "Phục Hồi Đại Lý",
+        "link" =>"index.php?controller=ph-dai-ly"
+    ),
+    "phmathang" => array(
+        "title" => "Phục Hồi Mặt Hàng",
+        "link" => "index.php?controller=ph-mat-hang"
+    ),
+    "phphieuxuat" => array(
+        "title" => "Phục Hồi Phiếu Xuất",
+        "link" => "index.php?controller=ph-phieu-xuat"
+    ),
+    "phphieuthu" => array(
+        "title" => "Phục Hồi Phiếu Thu",
+        "link" => "index.php?controller=ph-phieu-thu"
+    ),
+    "taikhoan"=>array(
+        "title" => "Quản Lý Tài Khoản",
+        "link" =>"index.php?controller=tai-khoan"
+    ),
+    "themloaitk"=>array(
+        "title" => "Thêm Loại Tài Khoản",
+        "link" =>"index.php?controller=loai-tai-khoan"
+    ),
+    "sualoaitk"=>array(
+        "title" => "Sửa Loại Tài Khoản",
+        "link" =>"index.php?controller=sua-loaitk"
+    ),
+    "lichsudn"=>array(
+        "title" => "Lịch Sử Đăng Nhập",
+        "link" =>"index.php?controller=lich-su"
+    ),
+    "quidinh"=>array(
+        "title" => "Qui Định",
+        "link" =>"index.php?controller=qui-dinh"
+    )
+);
+/*$quyen1 =  $_GET['quyen'];
+$edit_role = explode(',', $quyen1);
+$ok = 0;
+foreach ($edit_role as $key=>$itemrole){
+    $edit_ht = $value['title']."/".$value['link'];
+}
+print_r($edit_role);*/
+$idEdit = $_GET['id'];
+if (isset($_POST['submit'])) {
+    $chrole =$_POST['chrole'];
+    $tenLoai = $_POST['tenLoai'];
+    $countcheckrole=count($chrole);
+    $del_role ='';
+    for ($i=0;$i<$countcheckrole;$i++) {
+        $del_role .= $chrole[$i].",";
+    }
+    $sql = "update loaiuser set TenLoaiUser = '{$tenLoai}', Role = '$del_role' where MaLoaiUser=$idEdit";
+    if ($db->execute($sql)) {
+        echo "<script>alert('Cập nhật thành công!')</script>";
+        header('location: index.php?controller=loai-tai-khoan');
+    } else {
+        echo "<script>alert('Cập nhật thất bại!')</script>";
+    }
+}
+require_once 'View/sualoaitk.php';
+?>
+<script>
+	$(document).ready(function() {
+        $('#myTable').DataTable();
+        $("#addForm").validate({
+            rules: {
+                'chrole[]': {
+                    required: true,
+                },
+                tenLoai: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 50,
+                    alphanumeric: true,
+                }
+            },
+            messages: {
+                'chrole[]': {
+                    required: "<span class='error'>Chọn ít nhất 1 quyền hạn</span>",
+                },
+                tenLoai: {
+                    required: "<span class='error'>Tên loại tài khoản không được để trống!</span>",
+                    minlength: "<span class='error'>Độ dài tối thiểu: 5 ký tự!</span>",
+                    maxlength: "<span class='error'>Độ dài tối đa: 50 ký tự!</span>",
+                    alphanumeric: "<span class='error'>Không được phép nhập ký tự đặc biệt!</span>"
+                }
+            }
+        });
+    });
+	function checkall(class_name, obj){
+		var items = document.getElementsByClassName(class_name);
+		if (obj.checked == true){
+			for(i=0;i<items.length;i++){
+				items[i].checked = true;
+			}
+		}
+		else{
+			for(i=0;i<items.length;i++){
+				items[i].checked = false;
+			}
+		}
+	}
+ </script>
